@@ -86,6 +86,14 @@ jobs:
       - name: build
         run: make BUILDFLAGS="${{ matrix.race }}" build
 
+      - name: enable selinux
+        run: |
+          sudo systemctl stop apparmor
+          sudo systemctl disable apparmor
+          sudo apt update
+          sudo apt install -y policycoreutils selinux-basics selinux-utils
+          sudo selinux-activate
+
       - name: test
         run: make TESTFLAGS="${{ matrix.race }}" test
 
